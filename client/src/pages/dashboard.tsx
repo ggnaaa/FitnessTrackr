@@ -143,115 +143,120 @@ export default function Dashboard() {
       </div>
 
       {/* Welcome Section */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="text-lg font-semibold mb-1">
-              {getGreeting()}, {user?.name || "User"}!
-            </h3>
-            <p className="text-gray-600 mb-4">Here's a summary of your health progress</p>
+      <div className="mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-lg font-semibold mb-1">
+                {getGreeting()}, {user?.name || "User"}!
+              </h3>
+              <p className="text-gray-600">Here's a summary of your health progress</p>
+            </div>
+            <div className="hidden md:block">
+              {mainGoal && (
+                <div className="flex items-center space-x-6">
+                  <div className="text-right">
+                    <h4 className="font-medium">{mainGoal.name}</h4>
+                    <p className="text-sm text-gray-500">
+                      Current: {mainGoal.currentValue}, Target: {mainGoal.targetValue}
+                    </p>
+                  </div>
+                  <ProgressCircle 
+                    percentage={Math.min(100, Math.max(0, goalProgress))} 
+                    size={80} 
+                    strokeWidth={8}
+                  >
+                    <div className="text-center">
+                      <span className="text-lg font-bold">{goalProgress}%</span>
+                    </div>
+                  </ProgressCircle>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Health Metrics</h3>
-                <Link href="/health-metrics">
-                  <button className="text-primary text-sm font-medium flex items-center">
-                    Update Metrics
-                    <span className="material-icons text-sm ml-1">arrow_forward</span>
-                  </button>
-                </Link>
+        {/* Health Metrics Section */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold">Health Metrics</h3>
+            <Link href="/health-metrics">
+              <button className="text-primary text-sm font-medium flex items-center">
+                Update Metrics
+                <span className="material-icons text-sm ml-1">arrow_forward</span>
+              </button>
+            </Link>
+          </div>
+        
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+              <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">monitor_weight</span>
+              <div>
+                <p className="text-xs text-gray-500">Weight</p>
+                <p className="text-lg font-semibold">{healthMetric?.weight || 0} kg</p>
+                {healthMetric?.weightChange && (
+                  <div className="flex items-center text-xs">
+                    <span className={`flex items-center ${healthMetric.weightChange < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="material-icons text-xs">
+                        {healthMetric.weightChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
+                      </span>
+                      {formatChangeNumber(healthMetric.weightChange)}
+                    </span>
+                  </div>
+                )}
               </div>
+            </div>
             
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">monitor_weight</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Weight</p>
-                    <p className="text-lg font-semibold">{healthMetric?.weight || 0} kg</p>
-                    {healthMetric?.weightChange && (
-                      <div className="flex items-center text-xs">
-                        <span className={`flex items-center ${healthMetric.weightChange < 0 ? "text-green-600" : "text-red-600"}`}>
-                          <span className="material-icons text-xs">
-                            {healthMetric.weightChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
-                          </span>
-                          {formatChangeNumber(healthMetric.weightChange)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">insights</span>
-                  <div>
-                    <p className="text-xs text-gray-500">BMI</p>
-                    <p className="text-lg font-semibold">{healthMetric?.bmi || 0}</p>
-                    {healthMetric?.bmiChange && (
-                      <div className="flex items-center text-xs">
-                        <span className={`flex items-center ${healthMetric.bmiChange < 0 ? "text-green-600" : "text-red-600"}`}>
-                          <span className="material-icons text-xs">
-                            {healthMetric.bmiChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
-                          </span>
-                          {formatChangeNumber(healthMetric.bmiChange)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">directions_run</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Active Minutes</p>
-                    <p className="text-lg font-semibold">{healthMetric?.activeMinutes || 0} min</p>
-                    <div className="flex items-center text-xs">
-                      <span className="flex items-center text-green-600">
-                        <span className="material-icons text-xs">arrow_drop_up</span>
-                        10%
+            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+              <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">insights</span>
+              <div>
+                <p className="text-xs text-gray-500">BMI</p>
+                <p className="text-lg font-semibold">{healthMetric?.bmi || 0}</p>
+                {healthMetric?.bmiChange && (
+                  <div className="flex items-center text-xs">
+                    <span className={`flex items-center ${healthMetric.bmiChange < 0 ? "text-green-600" : "text-red-600"}`}>
+                      <span className="material-icons text-xs">
+                        {healthMetric.bmiChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
                       </span>
-                    </div>
+                      {formatChangeNumber(healthMetric.bmiChange)}
+                    </span>
                   </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+              <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">directions_run</span>
+              <div>
+                <p className="text-xs text-gray-500">Active Minutes</p>
+                <p className="text-lg font-semibold">{healthMetric?.activeMinutes || 0} min</p>
+                <div className="flex items-center text-xs">
+                  <span className="flex items-center text-green-600">
+                    <span className="material-icons text-xs">arrow_drop_up</span>
+                    10%
+                  </span>
                 </div>
-                
-                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">local_fire_department</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Daily Calories</p>
-                    <p className="text-lg font-semibold">{healthMetric?.dailyCalories || 0}</p>
-                    <div className="flex items-center text-xs">
-                      <span className="flex items-center text-green-600">
-                        <span className="material-icons text-xs">arrow_drop_down</span>
-                        5%
-                      </span>
-                    </div>
-                  </div>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+              <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">local_fire_department</span>
+              <div>
+                <p className="text-xs text-gray-500">Daily Calories</p>
+                <p className="text-lg font-semibold">{healthMetric?.dailyCalories || 0}</p>
+                <div className="flex items-center text-xs">
+                  <span className="flex items-center text-green-600">
+                    <span className="material-icons text-xs">arrow_drop_down</span>
+                    5%
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="hidden md:block">
-            {mainGoal && (
-              <div className="flex items-center space-x-6">
-                <div className="text-right">
-                  <h4 className="font-medium">{mainGoal.name}</h4>
-                  <p className="text-sm text-gray-500">
-                    Current: {mainGoal.currentValue}, Target: {mainGoal.targetValue}
-                  </p>
-                </div>
-                <ProgressCircle 
-                  percentage={Math.min(100, Math.max(0, goalProgress))} 
-                  size={80} 
-                  strokeWidth={8}
-                >
-                  <div className="text-center">
-                    <span className="text-lg font-bold">{goalProgress}%</span>
-                  </div>
-                </ProgressCircle>
-              </div>
-            )}
-          </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
+      
+        {/* Weight Progress Section */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Weight Progress</h3>
             <Link href="/health-metrics">
