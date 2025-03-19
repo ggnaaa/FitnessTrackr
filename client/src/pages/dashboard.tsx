@@ -151,39 +151,47 @@ export default function Dashboard() {
             </h3>
             <p className="text-gray-600 mb-4">Here's a summary of your health progress</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <StatCard 
-                title="Current Weight" 
-                value={`${healthMetric?.weight || 0} kg`} 
-                icon="monitor_weight" 
-                change={healthMetric?.weightChange || 0}
-                changeDirection={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "down" : "up"}
-                status={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "success" : "danger"}
-              />
-              <StatCard 
-                title="BMI" 
-                value={healthMetric?.bmi || 0} 
-                icon="insights" 
-                change={healthMetric?.bmiChange || 0}
-                changeDirection={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "down" : "up"}
-                status={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "success" : "danger"}
-              />
-              <StatCard 
-                title="Active Minutes" 
-                value={`${healthMetric?.activeMinutes || 0} min`} 
-                icon="directions_run" 
-                change={10}
-                changeDirection="up"
-                status="success"
-              />
-              <StatCard 
-                title="Daily Calories" 
-                value={`${healthMetric?.dailyCalories || 0}`} 
-                icon="local_fire_department" 
-                change={5}
-                changeDirection="down"
-                status="success"
-              />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                <StatCard 
+                  title="Current Weight" 
+                  value={`${healthMetric?.weight || 0} kg`} 
+                  icon="monitor_weight" 
+                  change={healthMetric?.weightChange || 0}
+                  changeDirection={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "down" : "up"}
+                  status={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "success" : "danger"}
+                />
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                <StatCard 
+                  title="BMI" 
+                  value={healthMetric?.bmi || 0} 
+                  icon="insights" 
+                  change={healthMetric?.bmiChange || 0}
+                  changeDirection={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "down" : "up"}
+                  status={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "success" : "danger"}
+                />
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                <StatCard 
+                  title="Active Minutes" 
+                  value={`${healthMetric?.activeMinutes || 0} min`} 
+                  icon="directions_run" 
+                  change={10}
+                  changeDirection="up"
+                  status="success"
+                />
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                <StatCard 
+                  title="Daily Calories" 
+                  value={`${healthMetric?.dailyCalories || 0}`} 
+                  icon="local_fire_department" 
+                  change={5}
+                  changeDirection="down"
+                  status="success"
+                />
+              </div>
             </div>
           </div>
           <div className="hidden md:block">
