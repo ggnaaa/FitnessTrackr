@@ -8,6 +8,8 @@ import { MealCard } from "@/components/dashboard/meal-card";
 import { WorkoutCard, UpcomingWorkoutCard } from "@/components/dashboard/workout-card";
 import { ArticleCard } from "@/components/dashboard/article-card";
 import { formatDate, formatTime } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
   const { toast } = useToast();
@@ -103,6 +105,43 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Quick Actions Section */}
+      <div className="mb-6">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <Link href="/metrics">
+                <Button variant="outline" className="w-full h-full flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <span className="material-icons text-primary text-2xl mb-2">monitoring</span>
+                  <span className="text-sm">Update Metrics</span>
+                </Button>
+              </Link>
+              <Link href="/goals">
+                <Button variant="outline" className="w-full h-full flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <span className="material-icons text-primary text-2xl mb-2">flag</span>
+                  <span className="text-sm">Set New Goal</span>
+                </Button>
+              </Link>
+              <Link href="/diet">
+                <Button variant="outline" className="w-full h-full flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <span className="material-icons text-primary text-2xl mb-2">restaurant</span>
+                  <span className="text-sm">View Diet Plan</span>
+                </Button>
+              </Link>
+              <Link href="/workouts">
+                <Button variant="outline" className="w-full h-full flex flex-col items-center justify-center p-4 border border-gray-200">
+                  <span className="material-icons text-primary text-2xl mb-2">fitness_center</span>
+                  <span className="text-sm">Start Workout</span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Welcome Section */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
         <div className="flex justify-between items-start">
@@ -111,182 +150,184 @@ export default function Dashboard() {
               {getGreeting()}, {user?.name || "User"}!
             </h3>
             <p className="text-gray-600 mb-4">Here's a summary of your health progress</p>
-            <div className="flex mt-4 space-x-3">
-              <Link href="/metrics">
-                <button className="bg-primary text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-600 transition-colors">
-                  Track Today
-                </button>
-              </Link>
-              <Link href="/goals">
-                <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium hover:bg-gray-50 transition-colors">
-                  View Reports
-                </button>
-              </Link>
-            </div>
-          </div>
-          {/* Progress Circle */}
-          <ProgressCircle percentage={goalProgress || 70} fgColor="#4F46E5">
-            <span className="text-2xl font-bold text-primary">{goalProgress || 70}%</span>
-            <span className="text-xs text-gray-500">of goal</span>
-          </ProgressCircle>
-        </div>
-      </div>
 
-      {/* Quick Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard
-          title="Current Weight"
-          value={`${healthMetric?.weight || 68} kg`}
-          icon="monitor_weight"
-          change={-2}
-          changeText="from last month"
-          status="success"
-        />
-        <StatCard
-          title="BMI"
-          value={healthMetric?.bmi || "22.6"}
-          icon="straighten"
-          changeText="Normal healthy range"
-          status="success"
-        />
-        <StatCard
-          title="Daily Calories"
-          value={healthMetric?.calories || 1850}
-          icon="local_fire_department"
-          change={-120}
-          changeText="from target"
-          status="success"
-        />
-        <StatCard
-          title="Active Minutes"
-          value={`${healthMetric?.activeMinutes || 38} min`}
-          icon="timer"
-          change={-22}
-          changeText="to target"
-          status="danger"
-          changeDirection="down"
-        />
-      </div>
-
-      {/* Weight Progress Chart */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Weight Progress</h3>
-          <div className="text-sm text-gray-500">
-            <Link href="/metrics">
-              <button className="text-primary font-medium">View All</button>
-            </Link>
-          </div>
-        </div>
-        <WeightChart data={weightData} />
-      </div>
-
-      {/* Two Column Section for Diet and Workouts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Diet Recommendation */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">Today's Diet Plan</h3>
-            <Link href="/diet">
-              <button className="text-primary text-sm font-medium">View All</button>
-            </Link>
-          </div>
-
-          {loadingDiet ? (
-            <div className="py-10 text-center">
-              <span className="material-icons animate-spin text-gray-400">refresh</span>
-              <p className="text-sm text-gray-500 mt-2">Loading your meal plan...</p>
-            </div>
-          ) : dietPlan?.meals && dietPlan.meals.length > 0 ? (
-            dietPlan.meals.map((meal: any) => (
-              <MealCard
-                key={meal.id}
-                name={meal.name}
-                description={meal.description}
-                time={meal.mealTime}
-                calories={meal.calories}
-                icon={meal.icon}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <StatCard 
+                title="Current Weight" 
+                value={`${healthMetric?.weight || 0} kg`} 
+                icon="monitor_weight" 
+                change={healthMetric?.weightChange || 0}
+                changeDirection={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "down" : "up"}
+                status={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "success" : "danger"}
               />
-            ))
-          ) : (
-            <div className="py-6 text-center border border-dashed border-gray-200 rounded-lg">
-              <span className="material-icons text-gray-400 mb-2">restaurant</span>
-              <p className="text-gray-500">No meal plan available</p>
+              <StatCard 
+                title="BMI" 
+                value={healthMetric?.bmi || 0} 
+                icon="insights" 
+                change={healthMetric?.bmiChange || 0}
+                changeDirection={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "down" : "up"}
+                status={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "success" : "danger"}
+              />
+              <StatCard 
+                title="Active Minutes" 
+                value={`${healthMetric?.activeMinutes || 0} min`} 
+                icon="directions_run" 
+                change={10}
+                changeDirection="up"
+                status="success"
+              />
+              <StatCard 
+                title="Daily Calories" 
+                value={`${healthMetric?.dailyCalories || 0}`} 
+                icon="local_fire_department" 
+                change={5}
+                changeDirection="down"
+                status="success"
+              />
             </div>
-          )}
+          </div>
+          <div className="hidden md:block">
+            {mainGoal && (
+              <div className="flex items-center space-x-6">
+                <div className="text-right">
+                  <h4 className="font-medium">{mainGoal.name}</h4>
+                  <p className="text-sm text-gray-500">
+                    Current: {mainGoal.currentValue}, Target: {mainGoal.targetValue}
+                  </p>
+                </div>
+                <ProgressCircle 
+                  percentage={Math.min(100, Math.max(0, goalProgress))} 
+                  size={80} 
+                  strokeWidth={8}
+                >
+                  <div className="text-center">
+                    <span className="text-lg font-bold">{goalProgress}%</span>
+                  </div>
+                </ProgressCircle>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="mt-6">
+          <h4 className="font-medium mb-3">Weight Progress</h4>
+          <div className="h-40">
+            <WeightChart data={weightData} />
+          </div>
+        </div>
+      </div>
 
-          <div className="mt-4">
-            <Link href="/diet">
-              <button className="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-indigo-600 transition-colors">
-                Update Diet Preferences
-              </button>
-            </Link>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Diet Plan Section */}
+        <div className="md:col-span-2">
+          <div className="bg-white rounded-xl shadow-sm p-6 h-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Today's Diet Plan</h3>
+              <Link href="/diet">
+                <button className="text-primary text-sm font-medium flex items-center">
+                  View Full Plan
+                  <span className="material-icons text-sm ml-1">arrow_forward</span>
+                </button>
+              </Link>
+            </div>
+
+            {loadingDiet ? (
+              <div className="py-10 text-center">
+                <span className="material-icons animate-spin text-gray-400">refresh</span>
+                <p className="text-sm text-gray-500 mt-2">Loading meal plan...</p>
+              </div>
+            ) : dietPlan?.meals && dietPlan.meals.length > 0 ? (
+              <div className="space-y-4">
+                {dietPlan.meals.slice(0, 3).map((meal: any) => (
+                  <MealCard
+                    key={meal.id}
+                    name={meal.name}
+                    description={meal.description}
+                    time={formatTime(meal.time)}
+                    calories={meal.calories}
+                    icon={meal.type === 'breakfast' ? 'free_breakfast' : 
+                          meal.type === 'lunch' ? 'lunch_dining' : 
+                          meal.type === 'dinner' ? 'dinner_dining' : 'restaurant'}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="py-10 text-center border border-dashed border-gray-200 rounded-lg">
+                <span className="material-icons text-gray-400 mb-2">restaurant</span>
+                <p className="text-gray-500">No meals found</p>
+                <Link href="/diet">
+                  <button className="mt-2 text-primary text-sm">Create Diet Plan</button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Workout Recommendation */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">Today's Workout</h3>
-            <Link href="/workouts">
-              <button className="text-primary text-sm font-medium">View All</button>
-            </Link>
-          </div>
-
-          {loadingWorkout ? (
-            <div className="py-10 text-center">
-              <span className="material-icons animate-spin text-gray-400">refresh</span>
-              <p className="text-sm text-gray-500 mt-2">Loading your workout...</p>
+        {/* Workout Section */}
+        <div>
+          <div className="bg-white rounded-xl shadow-sm p-6 h-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Today's Workout</h3>
+              <Link href="/workouts">
+                <button className="text-primary text-sm font-medium flex items-center">
+                  View All
+                  <span className="material-icons text-sm ml-1">arrow_forward</span>
+                </button>
+              </Link>
             </div>
-          ) : workout ? (
-            <WorkoutCard
-              title={workout.name}
-              duration={workout.duration}
-              exercises={workout.exercises || []}
-              buttonText="Start Workout"
-              onButtonClick={handleStartWorkout}
-            />
-          ) : (
-            <div className="py-6 text-center border border-dashed border-gray-200 rounded-lg mb-4">
-              <span className="material-icons text-gray-400 mb-2">fitness_center</span>
-              <p className="text-gray-500">No workout scheduled for today</p>
-            </div>
-          )}
 
-          <div className="border-t border-gray-100 pt-4 mb-4">
-            <h4 className="font-medium mb-3">Upcoming Workouts</h4>
-            {loadingUpcoming ? (
-              <div className="py-4 text-center">
+            {loadingWorkout ? (
+              <div className="py-10 text-center">
                 <span className="material-icons animate-spin text-gray-400">refresh</span>
+                <p className="text-sm text-gray-500 mt-2">Loading workout...</p>
               </div>
-            ) : upcomingWorkouts && upcomingWorkouts.length > 0 ? (
-              upcomingWorkouts.slice(0, 2).map((workout: any) => (
-                <UpcomingWorkoutCard
-                  key={workout.id}
-                  icon={workout.icon}
+            ) : workout ? (
+              <div className="space-y-4">
+                <WorkoutCard
                   title={workout.name}
-                  date={workout.scheduledDate ? formatDate(workout.scheduledDate) : "Unscheduled"}
-                  time={workout.scheduledTime ? formatTime(workout.scheduledTime) : "Any time"}
                   duration={workout.duration}
+                  exercises={workout.exercises || []}
+                  buttonText="Start Workout"
+                  onButtonClick={handleStartWorkout}
                 />
-              ))
+                
+                {upcomingWorkouts && upcomingWorkouts.length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-sm text-gray-500 mt-6 mb-3">Coming up next</h4>
+                    <UpcomingWorkoutCard
+                      title={upcomingWorkouts[0].name}
+                      date={formatDate(upcomingWorkouts[0].date)}
+                      time={formatTime(upcomingWorkouts[0].time)}
+                      duration={upcomingWorkouts[0].duration}
+                      icon="fitness_center"
+                    />
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="py-2 text-center">
-                <p className="text-sm text-gray-500">No upcoming workouts</p>
+              <div className="py-10 text-center border border-dashed border-gray-200 rounded-lg">
+                <span className="material-icons text-gray-400 mb-2">fitness_center</span>
+                <p className="text-gray-500">No workout scheduled</p>
+                <Link href="/workouts">
+                  <button className="mt-2 text-primary text-sm">Create Workout</button>
+                </Link>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Health Articles Section */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+      {/* Articles Section */}
+      <div className="mt-8">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Recommended Articles</h3>
+          <h3 className="text-lg font-semibold">Featured Articles</h3>
           <Link href="/learn">
-            <button className="text-primary text-sm font-medium">View All</button>
+            <button className="text-primary text-sm font-medium flex items-center">
+              View All
+              <span className="material-icons text-sm ml-1">arrow_forward</span>
+            </button>
           </Link>
         </div>
+        
         {loadingArticles ? (
           <div className="py-10 text-center">
             <span className="material-icons animate-spin text-gray-400">refresh</span>
@@ -294,7 +335,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {articles?.slice(0, 3).map((article: any) => (
+            {articles && articles.slice(0, 3).map((article: any) => (
               <ArticleCard
                 key={article.id}
                 id={article.id}
@@ -308,36 +349,6 @@ export default function Dashboard() {
             ))}
           </div>
         )}
-      </div>
-
-      {/* About App Section - Brief version on dashboard */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          <div className="mb-4 md:mb-0 md:mr-8">
-            <h3 className="text-lg font-semibold mb-2">About FitTrack</h3>
-            <p className="text-gray-600 text-sm mb-3">
-              FitTrack is your personal health companion designed to help you achieve your fitness
-              goals through personalized diet plans, workout routines, and health tracking.
-            </p>
-            <Link href="/about">
-              <button className="text-primary text-sm font-medium">Learn more about us</button>
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <div className="bg-indigo-50 rounded-lg p-3 text-center min-w-[100px]">
-              <p className="text-2xl font-bold text-primary">15k+</p>
-              <p className="text-xs text-gray-600">Active Users</p>
-            </div>
-            <div className="bg-indigo-50 rounded-lg p-3 text-center min-w-[100px]">
-              <p className="text-2xl font-bold text-primary">500+</p>
-              <p className="text-xs text-gray-600">Workout Plans</p>
-            </div>
-            <div className="bg-indigo-50 rounded-lg p-3 text-center min-w-[100px]">
-              <p className="text-2xl font-bold text-primary">1000+</p>
-              <p className="text-xs text-gray-600">Diet Plans</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
