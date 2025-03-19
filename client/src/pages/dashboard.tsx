@@ -7,7 +7,7 @@ import { WeightChart } from "@/components/dashboard/chart";
 import { MealCard } from "@/components/dashboard/meal-card";
 import { WorkoutCard, UpcomingWorkoutCard } from "@/components/dashboard/workout-card";
 import { ArticleCard } from "@/components/dashboard/article-card";
-import { formatDate, formatTime } from "@/lib/utils";
+import { formatDate, formatTime, formatChangeNumber } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -151,46 +151,81 @@ export default function Dashboard() {
             </h3>
             <p className="text-gray-600 mb-4">Here's a summary of your health progress</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
-                <StatCard 
-                  title="Current Weight" 
-                  value={`${healthMetric?.weight || 0} kg`} 
-                  icon="monitor_weight" 
-                  change={healthMetric?.weightChange || 0}
-                  changeDirection={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "down" : "up"}
-                  status={healthMetric?.weightChange && healthMetric.weightChange < 0 ? "success" : "danger"}
-                />
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Health Metrics</h3>
+                <Link href="/health-metrics">
+                  <button className="text-primary text-sm font-medium flex items-center">
+                    Update Metrics
+                    <span className="material-icons text-sm ml-1">arrow_forward</span>
+                  </button>
+                </Link>
               </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
-                <StatCard 
-                  title="BMI" 
-                  value={healthMetric?.bmi || 0} 
-                  icon="insights" 
-                  change={healthMetric?.bmiChange || 0}
-                  changeDirection={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "down" : "up"}
-                  status={healthMetric?.bmiChange && healthMetric.bmiChange < 0 ? "success" : "danger"}
-                />
-              </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
-                <StatCard 
-                  title="Active Minutes" 
-                  value={`${healthMetric?.activeMinutes || 0} min`} 
-                  icon="directions_run" 
-                  change={10}
-                  changeDirection="up"
-                  status="success"
-                />
-              </div>
-              <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all hover:shadow-md">
-                <StatCard 
-                  title="Daily Calories" 
-                  value={`${healthMetric?.dailyCalories || 0}`} 
-                  icon="local_fire_department" 
-                  change={5}
-                  changeDirection="down"
-                  status="success"
-                />
+            
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">monitor_weight</span>
+                  <div>
+                    <p className="text-xs text-gray-500">Weight</p>
+                    <p className="text-lg font-semibold">{healthMetric?.weight || 0} kg</p>
+                    {healthMetric?.weightChange && (
+                      <div className="flex items-center text-xs">
+                        <span className={`flex items-center ${healthMetric.weightChange < 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className="material-icons text-xs">
+                            {healthMetric.weightChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
+                          </span>
+                          {formatChangeNumber(healthMetric.weightChange)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">insights</span>
+                  <div>
+                    <p className="text-xs text-gray-500">BMI</p>
+                    <p className="text-lg font-semibold">{healthMetric?.bmi || 0}</p>
+                    {healthMetric?.bmiChange && (
+                      <div className="flex items-center text-xs">
+                        <span className={`flex items-center ${healthMetric.bmiChange < 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className="material-icons text-xs">
+                            {healthMetric.bmiChange < 0 ? "arrow_drop_down" : "arrow_drop_up"}
+                          </span>
+                          {formatChangeNumber(healthMetric.bmiChange)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">directions_run</span>
+                  <div>
+                    <p className="text-xs text-gray-500">Active Minutes</p>
+                    <p className="text-lg font-semibold">{healthMetric?.activeMinutes || 0} min</p>
+                    <div className="flex items-center text-xs">
+                      <span className="flex items-center text-green-600">
+                        <span className="material-icons text-xs">arrow_drop_up</span>
+                        10%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">local_fire_department</span>
+                  <div>
+                    <p className="text-xs text-gray-500">Daily Calories</p>
+                    <p className="text-lg font-semibold">{healthMetric?.dailyCalories || 0}</p>
+                    <div className="flex items-center text-xs">
+                      <span className="flex items-center text-green-600">
+                        <span className="material-icons text-xs">arrow_drop_down</span>
+                        5%
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -216,8 +251,16 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        <div className="mt-6">
-          <h4 className="font-medium mb-3">Weight Progress</h4>
+        <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold">Weight Progress</h3>
+            <Link href="/health-metrics">
+              <button className="text-primary text-sm font-medium flex items-center">
+                View History
+                <span className="material-icons text-sm ml-1">arrow_forward</span>
+              </button>
+            </Link>
+          </div>
           <div className="h-40">
             <WeightChart data={weightData} />
           </div>
@@ -325,7 +368,7 @@ export default function Dashboard() {
       </div>
 
       {/* Articles Section */}
-      <div className="mt-8">
+      <div className="bg-white rounded-xl shadow-sm p-6 mt-8">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Featured Articles</h3>
           <Link href="/learn">
