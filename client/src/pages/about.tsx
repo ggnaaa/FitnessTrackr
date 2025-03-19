@@ -125,7 +125,7 @@ export default function About() {
               <div className="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-3 flex items-center justify-center">
                 <span className="material-icons text-gray-400 text-3xl">person</span>
               </div>
-              <h3 className="font-medium">Sarah Johnson</h3>
+              <h3 className="font-medium">Jamie Wright</h3>
               <p className="text-sm text-gray-500">Founder & CEO</p>
             </div>
             <div className="text-center">
