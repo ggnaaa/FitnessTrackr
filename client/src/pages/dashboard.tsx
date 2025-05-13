@@ -57,13 +57,13 @@ export default function Dashboard() {
 
   // Mock weight data for the chart
   const weightData = [
-    { day: "Mon", value: 60 },
-    { day: "Tue", value: 70 },
-    { day: "Wed", value: 75 },
-    { day: "Thu", value: 68 },
-    { day: "Fri", value: 65 },
-    { day: "Sat", value: 60 },
-    { day: "Sun", value: 55 }
+    { day: "Mon", value: 72 },
+    { day: "Tue", value: 71.5 },
+    { day: "Wed", value: 70.5 },
+    { day: "Thu", value: 69.5 },
+    { day: "Fri", value: 69 },
+    { day: "Sat", value: 68.5 },
+    { day: "Sun", value: 68 }
   ];
 
   const handleStartWorkout = () => {
@@ -177,7 +177,7 @@ export default function Dashboard() {
         </div>
 
         {/* Health Metrics Section */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6 max-h-96 overflow-auto">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Health Metrics</h3>
             <Link href="/health-metrics">
@@ -188,8 +188,8 @@ export default function Dashboard() {
             </Link>
           </div>
         
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="flex space-x-3 items-center p-2 bg-gray-50 rounded-lg">
               <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">monitor_weight</span>
               <div>
                 <p className="text-xs text-gray-500">Weight</p>
@@ -207,7 +207,7 @@ export default function Dashboard() {
               </div>
             </div>
             
-            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex space-x-3 items-center p-2 bg-gray-50 rounded-lg">
               <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">insights</span>
               <div>
                 <p className="text-xs text-gray-500">BMI</p>
@@ -225,7 +225,7 @@ export default function Dashboard() {
               </div>
             </div>
             
-            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex space-x-3 items-center p-2 bg-gray-50 rounded-lg">
               <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">directions_run</span>
               <div>
                 <p className="text-xs text-gray-500">Active Minutes</p>
@@ -239,7 +239,7 @@ export default function Dashboard() {
               </div>
             </div>
             
-            <div className="flex space-x-3 items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex space-x-3 items-center p-2 bg-gray-50 rounded-lg">
               <span className="material-icons text-primary p-2 bg-primary/10 rounded-full">local_fire_department</span>
               <div>
                 <p className="text-xs text-gray-500">Daily Calories</p>
