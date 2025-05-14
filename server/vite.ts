@@ -26,7 +26,7 @@ export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
-    allowedHosts: "all",
+    allowedHosts: ["all"],
   };
 
   const vite = await createViteServer({
@@ -48,8 +48,9 @@ export async function setupVite(app: Express, server: Server) {
     const url = req.originalUrl;
 
     try {
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
+      // const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.resolve();
+      // const __dirname = path.dirname(__filename);
 
       const clientTemplate = path.resolve(
         __dirname,

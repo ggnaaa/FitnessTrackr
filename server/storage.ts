@@ -102,6 +102,7 @@ export class MemStorage implements IStorage {
     const newUser: User = { 
       ...user, 
       id,
+      avatar: user.avatar ?? null,
       createdAt: new Date()
     };
     this.users.set(id, newUser);
@@ -131,7 +132,9 @@ export class MemStorage implements IStorage {
       id,
       bmi,
       createdAt: new Date(),
-      recordedDate: metric.recordedDate || new Date(),
+      recordedDate: typeof metric.recordedDate === 'string' ? metric.recordedDate : (metric.recordedDate && typeof (metric.recordedDate as any).toISOString === 'function' ? (metric.recordedDate as any).toISOString() : new Date().toISOString()),
+      calories: metric.calories ?? null,
+      activeMinutes: metric.activeMinutes ?? null,
     };
     
     this.healthMetrics.set(id, newMetric);
@@ -172,6 +175,7 @@ export class MemStorage implements IStorage {
     const newMeal: Meal = {
       ...meal,
       id,
+      icon: meal.icon ?? "",
       createdAt: new Date(),
     };
     this.meals.set(id, newMeal);
@@ -223,6 +227,10 @@ export class MemStorage implements IStorage {
     const newWorkout: Workout = {
       ...workout,
       id,
+      description: workout.description ?? null,
+      icon: workout.icon ?? "",
+      scheduledDate: workout.scheduledDate ?? null,
+      scheduledTime: workout.scheduledTime ?? null,
       createdAt: new Date(),
     };
     this.workouts.set(id, newWorkout);
@@ -240,6 +248,9 @@ export class MemStorage implements IStorage {
     const newExercise: Exercise = {
       ...exercise,
       id,
+      icon: exercise.icon ?? "",
+      sets: exercise.sets ?? null,
+      reps: exercise.reps ?? null,
       createdAt: new Date(),
     };
     this.exercises.set(id, newExercise);
@@ -268,6 +279,7 @@ export class MemStorage implements IStorage {
     const newArticle: Article = {
       ...article,
       id,
+      imageUrl: article.imageUrl ?? null,
       createdAt: new Date(),
     };
     this.articles.set(id, newArticle);
@@ -290,6 +302,11 @@ export class MemStorage implements IStorage {
     const newGoal: Goal = {
       ...goal,
       id,
+      currentValue: goal.currentValue ?? null,
+      startDate: goal.startDate ?? new Date().toISOString(),
+      targetDate: goal.targetDate ?? null,
+      completed: goal.completed ?? false,
+      targetValue: goal.targetValue ?? null,
       createdAt: new Date(),
     };
     this.goals.set(id, newGoal);
@@ -377,6 +394,7 @@ export class MemStorage implements IStorage {
       this.articles.set(id, {
         ...article,
         id,
+        imageUrl: article.imageUrl ?? null,
         createdAt: new Date()
       });
     });

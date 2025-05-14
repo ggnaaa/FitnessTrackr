@@ -327,7 +327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: user.id,
         weight: 68,
         height: 173,
-        recordedDate: new Date(),
+        recordedDate: new Date().toISOString(),
         calories: 1850,
         activeMinutes: 38
       });
@@ -473,8 +473,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name: "Lose Weight",
         targetValue: 65,
         currentValue: 68,
-        startDate: new Date(),
-        targetDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
+        startDate: new Date().toISOString(),
+        targetDate: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString(),
         completed: false
       });
       
@@ -499,14 +499,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
 function generateRecommendations(healthMetric: any) {
   const { weight, height, bmi } = healthMetric;
   
-  let dietRecommendation = {
+  let dietRecommendation: {
+    type: string;
+    calories: number;
+    macros: { protein: number; carbs: number; fats: number };
+    recommendations: string[];
+  } = {
     type: "maintenance",
     calories: 0,
     macros: { protein: 0, carbs: 0, fats: 0 },
     recommendations: []
   };
   
-  let workoutRecommendation = {
+  let workoutRecommendation: {
+    type: string;
+    frequency: string;
+    recommendations: string[];
+  } = {
     type: "balanced",
     frequency: "3-4 times per week",
     recommendations: []
@@ -521,19 +530,19 @@ function generateRecommendations(healthMetric: any) {
     // Underweight
     dietRecommendation.type = "weight gain";
     dietRecommendation.calories = Math.round(bmr * 1.5);
-    dietRecommendation.recommendations = [
-      "Increase caloric intake with nutrient-dense foods",
-      "Focus on protein-rich foods like lean meats, eggs, and legumes",
-      "Include healthy fats from avocados, nuts, and olive oil",
-      "Eat more frequently, 5-6 smaller meals throughout the day"
+    dietRecommendation.recommendations= [
+      "Increase caloric intake with nutrient-dense foods" as string,
+      "Focus on protein-rich foods like lean meats, eggs, and legumes" as string,
+      "Include healthy fats from avocados, nuts, and olive oil" as string,
+      "Eat more frequently, 5-6 smaller meals throughout the day" as string
     ];
     
     workoutRecommendation.type = "strength focused";
     workoutRecommendation.recommendations = [
-      "Focus on compound movements like squats, deadlifts, and bench press",
-      "Limit cardio to 1-2 sessions per week of 20-30 minutes",
-      "Prioritize resistance training with progressive overload",
-      "Ensure adequate rest between workouts (48-72 hours per muscle group)"
+      "Focus on compound movements like squats, deadlifts, and bench press" as string,
+      "Limit cardio to 1-2 sessions per week of 20-30 minutes" as string,
+      "Prioritize resistance training with progressive overload" as string,
+      "Ensure adequate rest between workouts (48-72 hours per muscle group)" as string
     ];
   } else if (bmi >= 18.5 && bmi < 25) {
     // Normal weight
