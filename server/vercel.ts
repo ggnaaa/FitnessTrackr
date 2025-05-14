@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import path from "path";
 import { registerRoutes } from "./routes";
-import { serveStatic, log } from "./vite";
+import { log } from "./vite";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 
 const app = express();
@@ -43,8 +43,7 @@ let serverReady = false;
 async function prepareServer() {
   if (!serverReady) {
     await registerRoutes(app);
-    // In production, serve static files from dist/public
-    serveStatic(app);
+    // Removed static serving to let Vercel handle static files
     serverReady = true;
   }
 }
