@@ -1,6 +1,11 @@
 import express, { type Request, Response, NextFunction } from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -54,11 +59,15 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   } else {
     // serveStatic(app);
-  }
+    const distPath = path.join(__dirname, "..", "dist");
+    app.use(express.static(distPath));
+  
 
   app.get("/", (req, res) => {
-  res.send("Hello from fitness app!");
+    res.sendFile(path.join(distPath, "index.html"));
+  // res.send("Hello from fitness app!");
   });
+}
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
